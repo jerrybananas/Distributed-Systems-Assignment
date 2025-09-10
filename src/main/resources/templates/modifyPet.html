@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Pets</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+
+    <style>
+        table,
+        th,
+        td {
+            position: center;
+            align-items: center;
+            border: 10px solid #1c1c1e;
+            text-align: left;
+            border-collapse: collapse;
+            width: fit-content;
+            background-color: #1c1c1e;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        body {
+            align-items: center;
+            font-family: 'Arial', Times, serif;
+            background-color: #2f3136;
+            font-weight: bolder;
+            text-align: center;
+            color: white;
+            margin: auto;
+        }
+
+        button, option {
+            height: 40px;
+            width: 400px;
+            text-align: center;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-weight: bolder
+        }
+
+        h2 {
+            font-weight: bolder;
+        }
+
+        form, div, body {
+
+            width: 400px;
+            text-align: center;
+            margin-bottom: 5px;
+
+
+        }
+    </style>
+
+</head>
+<body>
+<div>
+    <form>
+        <h2>Please enter the pet's new credentials</h2>
+        <p>
+            <label for="serialNumber" class="sr-only">Serial Number</label>
+            <input style="background-color: #1c1c1e; color: white" type="text" id="serialNumber" class="form-control" placeholder="Serial Number"
+                   required
+                   autofocus>
+        </p>
+        <p>
+            <label for="medical_history" class="sr-only">Medical History</label>
+            <input style="background-color: #1c1c1e; color: white" type="text" id="medical_history" class="form-control" placeholder="new medical history" required
+                   autofocus>
+        </p>
+
+
+        <button style="background-color: #f57731;" class="button" id="sendRequest" type="submit">Modify History</button>
+    </form>
+
+
+    <form class="form" method="get" action="/vet">
+        <button style=" background-color: #99aab5;" class="button" type="submit">Back</button>
+    </form>
+</div>
+
+</body>
+</html>
+
+<script>
+
+
+    window.addEventListener('load', (event) => {
+        document.getElementById('sendRequest').addEventListener('click', (event) => {
+            const pet = {
+                'serialNumber': document.getElementById('serialNumber').value,
+                'race': null,
+                'sex': null,
+                'birthday': "2001-10-20",
+                'ownerID': null,
+                'medical_history': document.getElementById('medical_history').value
+            };
+
+            const xhr = new XMLHttpRequest();
+            xhr.open('POST', 'http://localhost:8080/vet/modify', true);
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.send(JSON.stringify(pet));
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        alert(xhr.responseText);
+                    }
+                }
+            };
+        });
+    });
+
+</script>

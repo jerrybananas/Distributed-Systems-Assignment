@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Pet Registry - Veterinarian Dashboard">
+    <meta name="author" content="it21542 - Antonis Rouseas">
+    <title>Veterinarian Dashboard - Pet Registry</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background-image: 
+                url('https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'),
+                linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h2 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .vet-icon {
+            font-size: 4rem;
+            color: #17a2b8;
+            margin-bottom: 20px;
+        }
+
+        .welcome-badge {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .search-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #dee2e6;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px 20px;
+            border: 2px solid #dee2e6;
+            border-radius: 15px;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #17a2b8;
+            box-shadow: 0 0 0 0.3rem rgba(23, 162, 184, 0.25);
+            transform: translateY(-2px);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #138496 0%, #1c9f85 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(23, 162, 184, 0.3);
+        }
+
+        .search-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .pet-details-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .pet-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .pet-table th {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+            padding: 20px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .pet-table td {
+            padding: 20px 15px;
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 500;
+        }
+
+        .pet-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .pet-table tbody tr:hover {
+            background: rgba(23, 162, 184, 0.1);
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn-action {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-approve {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-approve:hover {
+            background: linear-gradient(135deg, #218838 0%, #1c9f85 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-modify {
+            background: linear-gradient(135deg, #fd7e14 0%, #ffc107 100%);
+            color: white;
+        }
+
+        .btn-modify:hover {
+            background: linear-gradient(135deg, #e36209 0%, #e0a800 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(253, 126, 20, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838 0%, #1c9f85 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .editable-field {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+            padding: 5px;
+            font-weight: normal;
+        }
+
+        .editable-select {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+            padding: 5px;
+        }
+
+        .editable-textarea {
+            background: #fff3cd;
+            border: 2px solid #ffc107;
+            border-radius: 5px;
+            padding: 10px;
+            width: 100%;
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            color: white;
+        }
+
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(108, 117, 125, 0.3);
+            color: white;
+            text-decoration: none;
+        }
+
+        .alert {
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border: none;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            color: white;
+        }
+
+        .medical-history-section {
+            background: rgba(23, 162, 184, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .medical-history-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .approval-status {
+            font-size: 1.1rem;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 25px;
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .approval-status.approved {
+            color: #28a745;
+        }
+
+        .approval-status.not-approved {
+            color: #dc3545;
+        }
+
+        .medical-history-content {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            min-height: 100px;
+            font-style: italic;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .pet-table {
+                font-size: 0.9rem;
+            }
+            
+            .pet-table th,
+            .pet-table td {
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <i class="fas fa-user-md vet-icon"></i>
+            <h2>Veterinarian Dashboard</h2>
+            <div class="welcome-badge" id="welcomeBadge">
+                <i class="fas fa-stethoscope"></i> <span id="welcomeText">Welcome, Dr. Veterinarian</span>
+            </div>
+            <p>Search and manage pet medical records</p>
+        </div>
+
+        <div class="search-section">
+            <div class="search-title">
+                <i class="fas fa-search"></i> Search Pet by ID
+            </div>
+            <div class="search-form">
+                <input 
+                    type="text" 
+                    id="serialNumber" 
+                    class="search-input" 
+                    placeholder="Enter Pet ID (e.g., 123, 000000123, or 000-000-123)"
+                    maxlength="15"
+                >
+                <button id="searchBtn" class="search-btn">
+                    <i class="fas fa-search"></i> Search Pet
+                </button>
+            </div>
+            
+            <div id="alertContainer"></div>
+        </div>
+
+        <div id="petDetailsSection" class="pet-details-section">
+            <table id="petTable" class="pet-table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-id-card"></i> Pet ID</th>
+                        <th><i class="fas fa-tag"></i> Name</th>
+                        <th><i class="fas fa-paw"></i> Species</th>
+                        <th><i class="fas fa-venus-mars"></i> Gender</th>
+                        <th><i class="fas fa-birthday-cake"></i> Birthday</th>
+                        <th><i class="fas fa-user"></i> Owner ID</th>
+                    </tr>
+                </thead>
+                <tbody id="petTableBody">
+                </tbody>
+            </table>
+            
+            <div class="medical-history-section">
+                <div class="medical-history-title">
+                    <i class="fas fa-file-medical-alt"></i> Medical History
+                    <div id="approvalStatus" class="approval-status">
+                        <i class="fas fa-times-circle text-danger"></i> Not Approved
+                    </div>
+                </div>
+                <div id="medicalHistoryContent" class="medical-history-content">
+                    No medical history records found.
+                </div>
+            </div>
+            
+            <div class="action-buttons">
+                <button id="approveBtn" class="btn-action btn-approve">
+                    <i class="fas fa-check-circle"></i> Approve Record
+                </button>
+                <button id="editBtn" class="btn-action btn-modify">
+                    <i class="fas fa-edit"></i> Edit Pet
+                </button>
+                <button id="saveBtn" class="btn-action btn-success" style="display: none;">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button id="cancelBtn" class="btn-action btn-secondary" style="display: none;">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="/logout" class="btn-action btn-logout">
+                <i class="fas fa-sign-out-alt"></i> Logout
+            </a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        let currentPet = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchBtn = document.getElementById('searchBtn');
+            const serialNumberInput = document.getElementById('serialNumber');
+            const petDetailsSection = document.getElementById('petDetailsSection');
+            const petTableBody = document.getElementById('petTableBody');
+            const medicalHistoryContent = document.getElementById('medicalHistoryContent');
+            const approveBtn = document.getElementById('approveBtn');
+
+            // Search button click event
+            searchBtn.addEventListener('click', function() {
+                performSearch();
+            });
+
+            // Enter key press event
+            serialNumberInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
+            });
+
+            // Approve button click event
+            approveBtn.addEventListener('click', function() {
+                if (currentPet) {
+                    console.log('=== FRONTEND: Approving pet', currentPet.serialNumber, '===');
+                    
+                    // Show loading state
+                    approveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Approving...';
+                    approveBtn.disabled = true;
+                    
+                    // Send approve request
+                    console.log('Sending request to:', `/api/pets/${currentPet.serialNumber}/approve`);
+                    fetch(`/api/pets/${currentPet.serialNumber}/approve`, {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    })
+                    .then(response => {
+                        console.log('Approve response status:', response.status);
+                        if (response.ok) {
+                            return response.json();
+                        } else {
+                            return response.text().then(text => {
+                                console.log('Error response:', text);
+                                throw new Error(`Server error: ${response.status} - ${text}`);
+                            });
+                        }
+                    })
+                    .then(updatedPet => {
+                        console.log('=== SUCCESS: Pet approved successfully', updatedPet);
+                        
+                        // Update the current pet object
+                        currentPet = updatedPet;
+                        
+                        // Update approval status display
+                        const approvalStatus = document.getElementById('approvalStatus');
+                        approvalStatus.innerHTML = '<i class="fas fa-check-circle"></i> Approved';
+                        approvalStatus.className = 'approval-status approved';
+                        
+                        // Hide the approve button
+                        approveBtn.style.display = 'none';
+                        
+                        showAlert('Pet record approved successfully!', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Error approving pet:', error);
+                        showAlert('Error approving pet record: ' + error.message, 'danger');
+                        
+                        // Reset button state
+                        approveBtn.innerHTML = '<i class="fas fa-check-circle"></i> Approve Record';
+                        approveBtn.disabled = false;
+                    });
+                } else {
+                    showAlert('No pet selected to approve', 'warning');
+                }
+            });
+
+            // Edit button click event
+            document.getElementById('editBtn').addEventListener('click', function() {
+                if (currentPet) {
+                    enableEditMode();
+                } else {
+                    showAlert('No pet selected to edit', 'warning');
+                }
+            });
+
+            // Save button click event
+            document.getElementById('saveBtn').addEventListener('click', function() {
+                if (currentPet) {
+                    savePetChanges();
+                }
+            });
+
+            // Cancel button click event
+            document.getElementById('cancelBtn').addEventListener('click', function() {
+                if (currentPet) {
+                    disableEditMode();
+                    displayPetDetails(currentPet); // Restore original data
+                }
+            });
+
+            function performSearch() {
+                const serialNumber = serialNumberInput.value.trim();
+                
+                if (!serialNumber) {
+                    showAlert('Please enter a Pet ID', 'warning');
+                    return;
+                }
+
+                // Normalize the pet ID (remove non-numeric characters and pad with zeros)
+                const normalizedId = normalizePetId(serialNumber);
+                if (!normalizedId) {
+                    showAlert('Please enter a valid Pet ID (numeric only)', 'danger');
+                    return;
+                }
+
+                // Show loading state
+                searchBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Searching...';
+                searchBtn.disabled = true;
+                petDetailsSection.style.display = 'none';
+                clearAlerts();
+
+                // Make the API call
+                fetch(`/findPet/${parseInt(normalizedId)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Pet not found');
+                        }
+                        return response.json();
+                    })
+                    .then(pet => {
+                        if (!pet || Object.keys(pet).length === 0) {
+                            throw new Error('Pet not found');
+                        }
+                        displayPetDetails(pet);
+                        showAlert('Pet found successfully!', 'success');
+                    })
+                    .catch(error => {
+                        console.error('Search error:', error);
+                        showAlert(`Pet not found. Please check the ID and try again.`, 'danger');
+                        petDetailsSection.style.display = 'none';
+                        currentPet = null;
+                    })
+                    .finally(() => {
+                        // Reset button state
+                        searchBtn.innerHTML = '<i class="fas fa-search"></i> Search Pet';
+                        searchBtn.disabled = false;
+                    });
+            }
+
+            function normalizePetId(petId) {
+                // Remove any non-numeric characters
+                const cleanId = petId.replace(/[^0-9]/g, '');
+                
+                if (!cleanId || cleanId.length === 0) {
+                    return null;
+                }
+                
+                if (cleanId.length > 9) {
+                    return null;
+                }
+                
+                // Pad with zeros to 9 digits
+                return cleanId.padStart(9, '0');
+            }
+
+            function displayPetDetails(pet) {
+                currentPet = pet;
+                
+                // Clear existing content
+                petTableBody.innerHTML = '';
+                
+                // Format the birthday
+                const birthday = pet.birthday ? new Date(pet.birthday).toLocaleDateString() : 'Not specified';
+                
+                // Display gender icon
+                const genderIcon = pet.sex === 'M' ? 
+                    '<i class="fas fa-mars text-primary"></i> Male' : 
+                    '<i class="fas fa-venus text-danger"></i> Female';
+                
+                // Create table row
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td><strong>${String(pet.serialNumber).padStart(9, '0')}</strong></td>
+                    <td><i class="fas fa-tag"></i> ${pet.name || 'Unknown'}</td>
+                    <td><i class="fas fa-paw"></i> ${pet.race || 'Not specified'}</td>
+                    <td>${genderIcon}</td>
+                    <td><i class="fas fa-calendar"></i> ${birthday}</td>
+                    <td><i class="fas fa-user"></i> ${pet.ownerID || 'Not specified'}</td>
+                `;
+                petTableBody.appendChild(row);
+                
+                // Display medical history
+                medicalHistoryContent.innerHTML = pet.medical_history && pet.medical_history !== 'empty' ? 
+                    pet.medical_history : 
+                    'No medical history records available for this pet.';
+                
+                // Display approval status
+                const approvalStatus = document.getElementById('approvalStatus');
+                const approveBtn = document.getElementById('approveBtn');
+                
+                if (pet.vet_approved === true) {
+                    approvalStatus.innerHTML = '<i class="fas fa-check-circle"></i> Approved';
+                    approvalStatus.className = 'approval-status approved';
+                    approveBtn.style.display = 'none'; // Hide approve button if already approved
+                } else {
+                    approvalStatus.innerHTML = '<i class="fas fa-times-circle"></i> Not Approved';
+                    approvalStatus.className = 'approval-status not-approved';
+                    approveBtn.style.display = 'inline-flex'; // Show approve button if not approved
+                }
+                
+                // Show the details section
+                petDetailsSection.style.display = 'block';
+                
+                // Smooth scroll to details
+                petDetailsSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+
+            function showAlert(message, type) {
+                const alertContainer = document.getElementById('alertContainer');
+                const alertDiv = document.createElement('div');
+                alertDiv.className = `alert alert-${type}`;
+                alertDiv.innerHTML = `
+                    <i class="fas fa-${getAlertIcon(type)}"></i>
+                    ${message}
+                `;
+                
+                alertContainer.innerHTML = '';
+                alertContainer.appendChild(alertDiv);
+                
+                // Auto remove after 5 seconds for success/info alerts
+                if (type === 'success' || type === 'info') {
+                    setTimeout(() => {
+                        alertDiv.remove();
+                    }, 5000);
+                }
+            }
+
+            function getAlertIcon(type) {
+                switch(type) {
+                    case 'success': return 'check-circle';
+                    case 'info': return 'info-circle';
+                    case 'warning': return 'exclamation-triangle';
+                    case 'danger': return 'times-circle';
+                    default: return 'info-circle';
+                }
+            }
+
+            function clearAlerts() {
+                document.getElementById('alertContainer').innerHTML = '';
+            }
+
+            // Add smooth animations on page load
+            const elements = document.querySelectorAll('.search-section, .header');
+            elements.forEach((element, index) => {
+                element.style.opacity = '0';
+                element.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    element.style.transition = 'all 0.6s ease';
+                    element.style.opacity = '1';
+                    element.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        function enableEditMode() {
+            // Show save/cancel buttons, hide edit button
+            document.getElementById('editBtn').style.display = 'none';
+            document.getElementById('saveBtn').style.display = 'inline-flex';
+            document.getElementById('cancelBtn').style.display = 'inline-flex';
+
+            // Make fields editable
+            const tableBody = document.getElementById('petTableBody');
+            const row = tableBody.querySelector('tr');
+            
+            if (row) {
+                const cells = row.querySelectorAll('td');
+                
+                // Name field (index 1)
+                const nameCell = cells[1];
+                const currentName = currentPet.name || 'Unknown';
+                nameCell.innerHTML = `<input type="text" class="editable-field" id="editName" value="${currentName}">`;
+                
+                // Race field (index 2)
+                const raceCell = cells[2];
+                const currentRace = currentPet.race || '';
+                raceCell.innerHTML = `<input type="text" class="editable-field" id="editRace" value="${currentRace}">`;
+                
+                // Gender field (index 3)
+                const genderCell = cells[3];
+                const currentSex = currentPet.sex;
+                genderCell.innerHTML = `
+                    <select class="editable-select" id="editGender">
+                        <option value="M" ${currentSex === 'M' ? 'selected' : ''}><i class="fas fa-mars"></i> Male</option>
+                        <option value="F" ${currentSex === 'F' ? 'selected' : ''}><i class="fas fa-venus"></i> Female</option>
+                    </select>
+                `;
+                
+                // Birthday field (index 4) - keep as display only for now
+                // Owner ID field (index 5) - keep as display only
+            }
+
+            // Make medical history editable
+            const medicalContent = document.getElementById('medicalHistoryContent');
+            const currentHistory = currentPet.medical_history && currentPet.medical_history !== 'empty' ? 
+                currentPet.medical_history : '';
+            medicalContent.innerHTML = `<textarea class="editable-textarea" id="editMedicalHistory">${currentHistory}</textarea>`;
+        }
+
+        function disableEditMode() {
+            // Show edit button, hide save/cancel buttons
+            document.getElementById('editBtn').style.display = 'inline-flex';
+            document.getElementById('saveBtn').style.display = 'none';
+            document.getElementById('cancelBtn').style.display = 'none';
+        }
+
+        function savePetChanges() {
+            // Collect edited data
+            const editedPet = {
+                serialNumber: currentPet.serialNumber,
+                name: document.getElementById('editName')?.value || currentPet.name,
+                race: document.getElementById('editRace')?.value || currentPet.race,
+                sex: document.getElementById('editGender')?.value || currentPet.sex,
+                birthday: currentPet.birthday,
+                ownerID: currentPet.ownerID,
+                medical_history: document.getElementById('editMedicalHistory')?.value || currentPet.medical_history
+            };
+
+            // Show loading state
+            const saveBtn = document.getElementById('saveBtn');
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+            saveBtn.disabled = true;
+
+            // Send update request
+            fetch(`/api/pets/${currentPet.serialNumber}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editedPet)
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error('Failed to update pet');
+                }
+            })
+            .then(updatedPet => {
+                currentPet = updatedPet;
+                disableEditMode();
+                displayPetDetails(updatedPet);
+                showAlert('Pet information updated successfully!', 'success');
+            })
+            .catch(error => {
+                console.error('Update error:', error);
+                showAlert('Error updating pet information. Please try again.', 'danger');
+            })
+            .finally(() => {
+                // Reset button state
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Save Changes';
+                saveBtn.disabled = false;
+            });
+        }
+
+        // Load current user info for personalized greeting
+        function loadCurrentUser() {
+            fetch('/debug/current-user')
+                .then(response => response.text())
+                .then(userInfo => {
+                    // Extract username from the response
+                    const usernameMatch = userInfo.match(/Username: ([^,]+)/);
+                    if (usernameMatch && usernameMatch[1]) {
+                        const username = usernameMatch[1].trim();
+                        document.getElementById('welcomeText').textContent = `Welcome, Dr. ${username}`;
+                    }
+                })
+                .catch(error => {
+                    console.log('Could not load user info:', error);
+                    // Keep default greeting if fetch fails
+                });
+        }
+
+        // Load user info when page loads
+        document.addEventListener('DOMContentLoaded', loadCurrentUser);
+    </script>
+</body>
+</html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Pet Registry - Register New Pet">
+    <meta name="author" content="it21542 - Antonis Rouseas">
+    <title>Register New Pet - Pet Registry</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background-image: 
+                url('https://images.unsplash.com/photo-1601758228041-f3b2795255f1?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'),
+                linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .registration-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h2 {
+            color: #333;
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 2rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .pet-icon {
+            font-size: 3rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            color: #333;
+            font-weight: 500;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-control {
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        .form-control:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            background: #fff;
+        }
+
+        .pet-type-section {
+            margin-bottom: 25px;
+        }
+
+        .pet-type-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .pet-type-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border: 2px solid #e1e5e9;
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .pet-type-card:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.15);
+        }
+
+        .pet-type-card.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .pet-type-card input[type="checkbox"] {
+            display: none;
+        }
+
+        .pet-type-icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .pet-type-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .other-input {
+            margin-top: 10px;
+            display: none;
+        }
+
+        .other-input.show {
+            display: block;
+        }
+
+        .gender-section {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .gender-option {
+            background: #f8f9ff;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            padding: 15px 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .gender-option:hover {
+            border-color: #667eea;
+        }
+
+        .gender-option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .gender-option input[type="radio"] {
+            display: none;
+        }
+
+        .btn-register {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-register:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-back {
+            background: #6c757d;
+            border: none;
+            border-radius: 10px;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .btn-back:hover {
+            background: #5a6268;
+            transform: translateY(-1px);
+        }
+
+        .alert {
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border: none;
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #dc3545 0%, #fd7e14 100%);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .registration-container {
+                padding: 30px 20px;
+            }
+            
+            .pet-type-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .gender-section {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="registration-container">
+        <div class="header">
+            <i class="fas fa-paw pet-icon"></i>
+            <h2>Register New Pet</h2>
+            <p>Please fill in your pet's information to complete registration</p>
+        </div>
+
+        <div id="alertContainer"></div>
+
+        <form id="petRegistrationForm">
+            <div class="form-group">
+                <label for="petName" class="form-label">
+                    <i class="fas fa-tag"></i> Pet Name
+                </label>
+                <input type="text" id="petName" class="form-control" 
+                       placeholder="Enter your pet's name" required maxlength="100">
+            </div>
+
+            <div class="pet-type-section">
+                <label class="form-label">
+                    <i class="fas fa-heart"></i> Species
+                </label>
+                <div class="pet-type-grid">
+                    <div class="pet-type-card" data-type="Dog">
+                        <input type="checkbox" id="typeDog" name="petType" value="Dog">
+                        <i class="fas fa-dog pet-type-icon"></i>
+                        <div class="pet-type-name">Dog</div>
+                    </div>
+                    <div class="pet-type-card" data-type="Cat">
+                        <input type="checkbox" id="typeCat" name="petType" value="Cat">
+                        <i class="fas fa-cat pet-type-icon"></i>
+                        <div class="pet-type-name">Cat</div>
+                    </div>
+                    <div class="pet-type-card" data-type="Hamster">
+                        <input type="checkbox" id="typeHamster" name="petType" value="Hamster">
+                        <i class="fas fa-mouse pet-type-icon"></i>
+                        <div class="pet-type-name">Hamster</div>
+                    </div>
+                    <div class="pet-type-card" data-type="Bird">
+                        <input type="checkbox" id="typeBird" name="petType" value="Bird">
+                        <i class="fas fa-dove pet-type-icon"></i>
+                        <div class="pet-type-name">Bird</div>
+                    </div>
+                    <div class="pet-type-card" data-type="Fish">
+                        <input type="checkbox" id="typeFish" name="petType" value="Fish">
+                        <i class="fas fa-fish pet-type-icon"></i>
+                        <div class="pet-type-name">Fish</div>
+                    </div>
+                    <div class="pet-type-card" data-type="Reptile">
+                        <input type="checkbox" id="typeReptile" name="petType" value="Reptile">
+                        <i class="fas fa-dragon pet-type-icon"></i>
+                        <div class="pet-type-name">Reptile</div>
+                    </div>
+                    <div class="pet-type-card" data-type="Other">
+                        <input type="checkbox" id="typeOther" name="petType" value="Other">
+                        <i class="fas fa-paw pet-type-icon"></i>
+                        <div class="pet-type-name">Other</div>
+                    </div>
+                </div>
+                <input type="text" id="otherPetType" class="form-control other-input" 
+                       placeholder="Please specify the pet type">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">
+                    <i class="fas fa-venus-mars"></i> Gender
+                </label>
+                <div class="gender-section">
+                    <div class="gender-option" data-gender="M">
+                        <input type="radio" id="genderMale" name="gender" value="M">
+                        <i class="fas fa-mars"></i>
+                        <div>Male</div>
+                    </div>
+                    <div class="gender-option" data-gender="F">
+                        <input type="radio" id="genderFemale" name="gender" value="F">
+                        <i class="fas fa-venus"></i>
+                        <div>Female</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="birthday" class="form-label">
+                    <i class="fas fa-birthday-cake"></i> Birthday
+                </label>
+                <input type="date" id="birthday" class="form-control" required>
+            </div>
+
+
+            <button type="submit" class="btn-register" id="registerBtn">
+                <i class="fas fa-plus-circle"></i> Register Pet
+            </button>
+        </form>
+
+        <form method="get" action="/citizen">
+            <button type="submit" class="btn-back">
+                <i class="fas fa-arrow-left"></i> Back to Dashboard
+            </button>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Pet type selection logic
+        document.querySelectorAll('.pet-type-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const checkbox = this.querySelector('input[type="checkbox"]');
+                const isOther = this.dataset.type === 'Other';
+                
+                // Clear all other selections (single selection)
+                document.querySelectorAll('.pet-type-card').forEach(c => {
+                    c.classList.remove('selected');
+                    c.querySelector('input[type="checkbox"]').checked = false;
+                });
+                
+                // Select this card
+                this.classList.add('selected');
+                checkbox.checked = true;
+                
+                // Show/hide other input
+                const otherInput = document.getElementById('otherPetType');
+                if (isOther) {
+                    otherInput.classList.add('show');
+                    otherInput.required = true;
+                } else {
+                    otherInput.classList.remove('show');
+                    otherInput.required = false;
+                    otherInput.value = '';
+                }
+            });
+        });
+
+        // Gender selection logic
+        document.querySelectorAll('.gender-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.gender-option').forEach(o => {
+                    o.classList.remove('selected');
+                    o.querySelector('input[type="radio"]').checked = false;
+                });
+                
+                this.classList.add('selected');
+                this.querySelector('input[type="radio"]').checked = true;
+            });
+        });
+
+        // Form submission
+        document.getElementById('petRegistrationForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('petName').value.trim(),
+                race: getSelectedPetType(),
+                sex: getSelectedGender(),
+                birthday: document.getElementById('birthday').value,
+                medical_history: "empty"
+            };
+
+            // Validation
+            if (!formData.name) {
+                showAlert('Please enter a pet name', 'danger');
+                return;
+            }
+            
+            if (!formData.race) {
+                showAlert('Please select a species', 'danger');
+                return;
+            }
+            
+            if (!formData.sex) {
+                showAlert('Please select a gender', 'danger');
+                return;
+            }
+
+            // Send request
+            fetch('/api/pets', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                if (response.ok) {
+                    showAlert('Pet registered successfully!', 'success');
+                    setTimeout(() => {
+                        window.location.href = '/citizen';
+                    }, 2000);
+                } else {
+                    return response.text().then(text => {
+                        throw new Error(text || 'Registration failed');
+                    });
+                }
+            })
+            .catch(error => {
+                showAlert('Error: ' + error.message, 'danger');
+            });
+        });
+
+        function getSelectedPetType() {
+            const selected = document.querySelector('.pet-type-card.selected');
+            if (!selected) return null;
+            
+            if (selected.dataset.type === 'Other') {
+                return document.getElementById('otherPetType').value;
+            }
+            return selected.dataset.type;
+        }
+
+        function getSelectedGender() {
+            const selected = document.querySelector('.gender-option.selected');
+            return selected ? selected.dataset.gender : null;
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-triangle'}"></i>
+                ${message}
+            `;
+            
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

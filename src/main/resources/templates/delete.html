@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>delete a user</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+    <link href="https://getbootstrap.com/docs/4.0/examples/signin/signin.css" rel="stylesheet" crossorigin="anonymous"/>
+
+    <style>
+        table,
+        th,
+        td {
+            position: center;
+            align-items: center;
+            border: 10px solid #1c1c1e;
+            text-align: left;
+            border-collapse: collapse;
+            width: fit-content;
+            background-color: #1c1c1e;
+            border-radius: 5px;
+            margin: 5px;
+        }
+
+        body {
+            align-items: center;
+            font-family: 'Arial', Times, serif;
+            background-color: #2f3136;
+            font-weight: bolder;
+            text-align: center;
+            color: white;
+            margin: auto;
+        }
+
+        button,option {
+            height: 40px;
+            width: 400px;
+            text-align: center;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            font-weight: bolder
+        }
+
+        h2 {
+            font-weight: bolder;
+        }
+
+        form, div, body {
+
+            width: 400px;
+            text-align: center;
+            margin-bottom: 5px;
+
+
+        }
+    </style>
+</head>
+
+<!--This is the redirect page to delete a User from the Admin's page.-->
+
+<body>
+<div>
+    <form >
+        <h2 >Enter the User's ID to delete his account</h2>
+
+        <p>
+            <label for="idNumber" class="sr-only">ID Number</label>
+            <input style="background-color: #1c1c1e; color: white" type="text" id="idNumber" name="ID Number" class="form-control" placeholder="Id Number"
+                   required>
+        </p>
+
+        <button style=" background-color: #f04747;" class="button" id="sendRequest" type="submit">Delete</button>
+    </form>
+
+    <button style=" background-color: #7289da;" class="button" id="listAll" type="submit">List all users</button>
+
+
+    <table id="table" class="form"></table>
+    <br>
+
+    <form class="form" method="get" action="/admin">
+        <button style=" background-color: #99aab5;" class="button" type="submit">Back</button>
+    </form>
+
+
+
+
+</div>
+</body>
+
+</html>
+
+<script>
+
+    /*
+    This function is responsible for sending a POST request on our app to delete a certain user. The admin
+    needs to enter a correct User ID
+     */
+    window.addEventListener('load', (event) => {
+        document.getElementById('sendRequest').addEventListener('click', (event) => {
+
+            if (document.getElementById('idNumber').value.length > 0) {
+
+                const user = {
+                    'idNumber': document.getElementById('idNumber').value,
+                    'password': null,
+                    'role': null,
+                    'username': null
+                };
+
+                const xhr = new XMLHttpRequest();
+                xhr.open('DELETE', 'http://localhost:8080/users/delete', true);
+                xhr.setRequestHeader('Content-type', 'application/json');
+                xhr.send(JSON.stringify(user));
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        if (xhr.status === 200) {
+                            alert(xhr.responseText);
+                        }
+                    }
+                };
+            } else {
+                alert('Please fill out the fields.')
+            }
+        });
+    });
+
+    //In this function we do a get request and get the credentials of all the users in the database.
+    const tableElem = document.getElementById('table');
+    tableElem.style.display = "none";
+
+    //SEARCH PETS
+    window.addEventListener('load', (event) => {
+        document.getElementById('listAll').addEventListener('click', (event) => {
+            tableElem.innerHTML = ``;
+            const xhr = new XMLHttpRequest();
+            xhr.open('GET', `http://localhost:8080/users/list`, true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        const results = JSON.parse(xhr.responseText);
+                        //const results = xhr.responseText;
+
+                        //alert('found!!');
+                        tableElem.style.display = "block";
+                        tableElem.style.alignItems = "center";
+                        tableElem.innerHTML +=
+                            "<tr>" +
+                            "<th>ID Number</th>" +
+                            "<th>Role</th>" +
+                            "<th>Username</th>" +
+                            "</tr>";
+
+                        results.forEach((element) => {
+                            tableElem.innerHTML += "<tr>" +
+                                "<td >" + `${element.idNumber}` + "</td>" +
+                                "<td >" + `${element.role}` + "</td>" +
+                                "<td >" + `${element.username}` + "</td>" +
+                                "</tr>";
+                        });
+                    }
+                }
+            };
+        });
+    });
+
+</script>

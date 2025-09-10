@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Pet Registry - Citizen Dashboard">
+    <meta name="author" content="it21542 - Antonis Rouseas">
+    <title>Pet Owner Dashboard - Pet Registry</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background-image: 
+                url('https://images.unsplash.com/photo-1574144611937-0df059b5ef3e?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'),
+                linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            padding: 40px;
+            max-width: 1000px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h2 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .citizen-icon {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .welcome-badge {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .actions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #f0fff4 0%, #e8f8f5 100%);
+            border: 2px solid #c3e6cb;
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+            transition: left 0.6s;
+        }
+
+        .action-card:hover::before {
+            left: 100%;
+        }
+
+        .action-card:hover {
+            border-color: #28a745;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(40, 167, 69, 0.2);
+        }
+
+        .action-card.primary {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            border-color: #28a745;
+        }
+
+        .action-card.primary:hover {
+            background: linear-gradient(135deg, #218838 0%, #1fa588 100%);
+            box-shadow: 0 20px 40px rgba(40, 167, 69, 0.3);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #28a745;
+        }
+
+        .action-card.primary .action-icon {
+            color: white;
+        }
+
+        .action-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 12px;
+        }
+
+        .action-card.primary .action-title {
+            color: white;
+        }
+
+        .action-description {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .action-card.primary .action-description {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .pet-search-section {
+            background: rgba(40, 167, 69, 0.1);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(40, 167, 69, 0.2);
+        }
+
+        .search-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 250px;
+            padding: 12px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            border: none;
+            border-radius: 25px;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: linear-gradient(135deg, #218838 0%, #1fa588 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(40, 167, 69, 0.3);
+        }
+
+        .pets-table-container {
+            margin-top: 30px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            display: none;
+        }
+
+        .pets-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .pets-table th {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .pets-table th:first-child {
+            border-top-left-radius: 10px;
+        }
+
+        .pets-table th:last-child {
+            border-top-right-radius: 10px;
+        }
+
+        .pets-table td {
+            padding: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .pets-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .approval-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .approval-approved {
+            background: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+            border: 1px solid rgba(40, 167, 69, 0.3);
+        }
+
+        .approval-pending {
+            background: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+            border: 1px solid rgba(220, 53, 69, 0.3);
+        }
+
+        .logout-section {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 2px solid #e9ecef;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            border-radius: 15px;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .alert {
+            border-radius: 15px;
+            padding: 15px 20px;
+            margin: 20px 0;
+            border: none;
+            font-weight: 500;
+        }
+
+        .alert-info {
+            background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+            color: white;
+        }
+
+        .alert-warning {
+            background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%);
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 30px 20px;
+            }
+            
+            .actions-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h2 {
+                font-size: 2rem;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            .search-input {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <i class="fas fa-user-friends citizen-icon"></i>
+            <h2>Pet Owner Dashboard</h2>
+            <div class="welcome-badge" id="welcomeBadge">
+                <i class="fas fa-heart"></i> <span id="welcomeText">Welcome, Pet Owner</span>
+            </div>
+            <p>Manage your beloved pets and keep their records up to date</p>
+        </div>
+
+        <div class="actions-grid">
+            <form method="get" action="/newpet">
+                <div class="action-card primary" onclick="this.closest('form').submit();">
+                    <i class="fas fa-plus-circle action-icon"></i>
+                    <div class="action-title">Register New Pet</div>
+                    <div class="action-description">
+                        Add a new pet to your account with complete information
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="pet-search-section">
+            <div class="search-title">
+                <i class="fas fa-paw"></i> My Pets
+            </div>
+            <div class="search-form">
+                <button id="loadMyPetsBtn" class="search-btn">
+                    <i class="fas fa-sync-alt"></i> Load My Pets
+                </button>
+            </div>
+            
+            <div id="alertContainer"></div>
+            
+            <div id="petsTableContainer" class="pets-table-container">
+                <table id="petsTable" class="pets-table">
+                    <thead>
+                        <tr>
+                            <th><i class="fas fa-id-card"></i> Pet ID</th>
+                            <th><i class="fas fa-tag"></i> Name</th>
+                            <th>Species</th>
+                            <th><i class="fas fa-venus-mars"></i> Gender</th>
+                            <th><i class="fas fa-birthday-cake"></i> Birthday</th>
+                            <th><i class="fas fa-file-medical"></i> Medical History</th>
+                            <th><i class="fas fa-check-circle"></i> Vet Approval</th>
+                        </tr>
+                    </thead>
+                    <tbody id="petsTableBody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="logout-section">
+            <form method="get" action="/logout">
+                <button type="submit" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.action-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(50px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.8s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+        });
+
+        // Load my pets functionality
+        document.getElementById('loadMyPetsBtn').addEventListener('click', function(e) {
+            e.preventDefault();
+            loadMyPets();
+        });
+
+        // Load pets automatically when page loads
+        loadMyPets();
+
+        function loadMyPets() {
+            const loadBtn = document.getElementById('loadMyPetsBtn');
+            
+            // Show loading state
+            loadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Loading...';
+            loadBtn.disabled = true;
+
+            // Get current user's pets (assuming user info is available in session)
+            fetch('/api/pets/my-pets')
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (!response.ok) {
+                        return response.text().then(text => {
+                            console.log('Error response:', text);
+                            throw new Error(`Server error: ${response.status} - ${text}`);
+                        });
+                    }
+                    return response.json();
+                })
+                .then(pets => {
+                    console.log('Pets received:', pets);
+                    if (!pets || pets.length === 0) {
+                        showAlert('You have no registered pets yet. Register your first pet!', 'info');
+                        document.getElementById('petsTableContainer').style.display = 'none';
+                    } else {
+                        displayPets(pets);
+                        showAlert(`Found ${pets.length} pet${pets.length > 1 ? 's' : ''} registered to your account`, 'success');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading pets:', error);
+                    showAlert('Error: ' + error.message, 'danger');
+                    document.getElementById('petsTableContainer').style.display = 'none';
+                })
+                .finally(() => {
+                    // Reset button
+                    loadBtn.innerHTML = '<i class="fas fa-sync-alt"></i> Load My Pets';
+                    loadBtn.disabled = false;
+                });
+        }
+
+        function displayPets(pets) {
+            const tableBody = document.getElementById('petsTableBody');
+            const tableContainer = document.getElementById('petsTableContainer');
+            
+            tableBody.innerHTML = '';
+            
+            pets.forEach(pet => {
+                const row = document.createElement('tr');
+                const approvalStatus = pet.vet_approved === true ? 
+                    '<div style="text-align: center; color: #28a745; font-size: 1.5rem;"><i class="fas fa-check-circle"></i></div>' : 
+                    '<div style="text-align: center; color: #dc3545; font-size: 1.5rem;"><i class="fas fa-times-circle"></i></div>';
+                
+                row.innerHTML = `
+                    <td><strong>${String(pet.serialNumber).padStart(9, '0')}</strong></td>
+                    <td><i class="fas fa-tag"></i> ${pet.name || 'Unknown'}</td>
+                    <td>${pet.race}</td>
+                    <td>${pet.sex === 'M' ? '<i class="fas fa-mars text-primary"></i> Male' : '<i class="fas fa-venus text-danger"></i> Female'}</td>
+                    <td><i class="fas fa-calendar"></i> ${new Date(pet.birthday).toLocaleDateString()}</td>
+                    <td>${pet.medical_history && pet.medical_history !== 'empty' ? pet.medical_history : 'No records yet'}</td>
+                    <td>${approvalStatus}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            tableContainer.style.display = 'block';
+            tableContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        function showAlert(message, type) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `
+                <i class="fas fa-${type === 'info' ? 'info-circle' : type === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                ${message}
+            `;
+            
+            alertContainer.innerHTML = '';
+            alertContainer.appendChild(alertDiv);
+            
+            // Auto remove after 5 seconds
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Add interaction effects
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+            
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-8px) scale(1.02)';
+                }, 150);
+            });
+        });
+
+        // Load current user info for personalized greeting
+        function loadCurrentUser() {
+            fetch('/debug/current-user')
+                .then(response => response.text())
+                .then(userInfo => {
+                    // Extract username from the response
+                    const usernameMatch = userInfo.match(/Username: ([^,]+)/);
+                    if (usernameMatch && usernameMatch[1]) {
+                        const username = usernameMatch[1].trim();
+                        document.getElementById('welcomeText').textContent = `Welcome, ${username}`;
+                    }
+                })
+                .catch(error => {
+                    console.log('Could not load user info:', error);
+                    // Keep default greeting if fetch fails
+                });
+        }
+
+        // Load user info when page loads
+        document.addEventListener('DOMContentLoaded', loadCurrentUser);
+    </script>
+</body>
+</html>

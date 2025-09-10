@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Pet Registry - Admin Dashboard">
+    <meta name="author" content="it21542 - Antonis Rouseas">
+    <title>Admin Dashboard - Pet Registry</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            background-image: 
+                url('https://images.unsplash.com/photo-1548199973-03cce0bbc87b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80'),
+                linear-gradient(rgba(102, 126, 234, 0.8), rgba(118, 75, 162, 0.8));
+            background-blend-mode: overlay;
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            padding: 50px;
+            max-width: 800px;
+            width: 100%;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h2 {
+            color: #333;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 2.5rem;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+
+        .admin-icon {
+            font-size: 4rem;
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .action-card {
+            background: linear-gradient(135deg, #f8f9ff 0%, #e8f0ff 100%);
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .action-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .action-card:hover::before {
+            left: 100%;
+        }
+
+        .action-card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(102, 126, 234, 0.2);
+        }
+
+        .action-card.register {
+            border-color: #28a745;
+        }
+
+        .action-card.register:hover {
+            border-color: #28a745;
+            box-shadow: 0 15px 35px rgba(40, 167, 69, 0.2);
+        }
+
+        .action-card.modify {
+            border-color: #fd7e14;
+        }
+
+        .action-card.modify:hover {
+            border-color: #fd7e14;
+            box-shadow: 0 15px 35px rgba(253, 126, 20, 0.2);
+        }
+
+        .action-card.delete {
+            border-color: #dc3545;
+        }
+
+        .action-card.delete:hover {
+            border-color: #dc3545;
+            box-shadow: 0 15px 35px rgba(220, 53, 69, 0.2);
+        }
+
+        .action-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .action-card.register .action-icon {
+            color: #28a745;
+        }
+
+        .action-card.modify .action-icon {
+            color: #fd7e14;
+        }
+
+        .action-card.delete .action-icon {
+            color: #dc3545;
+        }
+
+        .action-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .action-description {
+            color: #666;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .logout-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #e1e5e9;
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+            border: none;
+            border-radius: 12px;
+            color: white;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-logout:hover {
+            background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            color: white;
+            text-decoration: none;
+        }
+
+        .stats-section {
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stats-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                padding: 30px 20px;
+            }
+            
+            .admin-actions {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h2 {
+                font-size: 2rem;
+            }
+            
+            .action-card {
+                padding: 25px 20px;
+            }
+        }
+
+        .welcome-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <i class="fas fa-crown admin-icon"></i>
+            <h2>Administrator Dashboard</h2>
+            <div class="welcome-badge" id="welcomeBadge">
+                <i class="fas fa-user-shield"></i> <span id="welcomeText">Welcome, Admin</span>
+            </div>
+            <p>Manage users and oversee the Pet Registry system</p>
+        </div>
+
+        <div class="stats-section">
+            <div class="stats-title">
+                <i class="fas fa-chart-bar"></i> System Overview
+            </div>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number" id="totalPetsCount">Loading...</div>
+                    <div class="stat-label">Total Pets</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number" id="totalUsersCount">Loading...</div>
+                    <div class="stat-label">Total Users</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="admin-actions">
+            <form method="get" action="/register">
+                <div class="action-card register" onclick="this.closest('form').submit();">
+                    <i class="fas fa-user-plus action-icon"></i>
+                    <div class="action-title">Register User</div>
+                    <div class="action-description">
+                        Add new users to the system with assigned roles and permissions
+                    </div>
+                </div>
+            </form>
+
+            <form method="get" action="/modify">
+                <div class="action-card modify" onclick="this.closest('form').submit();">
+                    <i class="fas fa-user-edit action-icon"></i>
+                    <div class="action-title">Modify User</div>
+                    <div class="action-description">
+                        Update user information, roles, and account settings
+                    </div>
+                </div>
+            </form>
+
+            <form method="get" action="/delete">
+                <div class="action-card delete" onclick="this.closest('form').submit();">
+                    <i class="fas fa-user-minus action-icon"></i>
+                    <div class="action-title">Delete User</div>
+                    <div class="action-description">
+                        Remove users from the system and revoke access
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+        <div class="logout-section">
+            <form method="get" action="/logout">
+                <button type="submit" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Add smooth animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const cards = document.querySelectorAll('.action-card');
+            cards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                setTimeout(() => {
+                    card.style.transition = 'all 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+
+            // Load actual pet count from API
+            loadPetCount();
+            // Load actual user count from API
+            loadUserCount();
+        });
+
+        // Add click effect
+        document.querySelectorAll('.action-card').forEach(card => {
+            card.addEventListener('click', function() {
+                this.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-5px) scale(1)';
+                }, 150);
+            });
+        });
+
+        function loadPetCount() {
+            fetch('/api/pets/count')
+                .then(response => response.json())
+                .then(count => {
+                    document.getElementById('totalPetsCount').textContent = count;
+                })
+                .catch(error => {
+                    console.error('Error loading pet count:', error);
+                    // Fallback: try to get count from the pets list endpoint
+                    fetch('/pets')
+                        .then(response => response.json())
+                        .then(pets => {
+                            document.getElementById('totalPetsCount').textContent = Array.isArray(pets) ? pets.length : '0';
+                        })
+                        .catch(err => {
+                            console.error('Fallback pet count failed:', err);
+                            document.getElementById('totalPetsCount').textContent = '0';
+                        });
+                });
+        }
+
+        function loadUserCount() {
+            fetch('/api/users/count')
+                .then(response => response.json())
+                .then(count => {
+                    document.getElementById('totalUsersCount').textContent = count;
+                })
+                .catch(error => {
+                    console.error('Error loading user count:', error);
+                    // Fallback: try to get count from the users list endpoint
+                    fetch('/users/list')
+                        .then(response => response.json())
+                        .then(users => {
+                            document.getElementById('totalUsersCount').textContent = Array.isArray(users) ? users.length : '0';
+                        })
+                        .catch(err => {
+                            console.error('Fallback user count failed:', err);
+                            document.getElementById('totalUsersCount').textContent = '0';
+                        });
+                });
+        }
+
+        // Load current user info for personalized greeting
+        function loadCurrentUser() {
+            fetch('/debug/current-user')
+                .then(response => response.text())
+                .then(userInfo => {
+                    // Extract username from the response
+                    const usernameMatch = userInfo.match(/Username: ([^,]+)/);
+                    if (usernameMatch && usernameMatch[1]) {
+                        const username = usernameMatch[1].trim();
+                        document.getElementById('welcomeText').textContent = `Welcome, Admin ${username}`;
+                    }
+                })
+                .catch(error => {
+                    console.log('Could not load user info:', error);
+                    // Keep default greeting if fetch fails
+                });
+        }
+
+        // Load user info when page loads
+        document.addEventListener('DOMContentLoaded', loadCurrentUser);
+    </script>
+</body>
+</html>
