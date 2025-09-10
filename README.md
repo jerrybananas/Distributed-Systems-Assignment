@@ -12,6 +12,7 @@ A modern Spring Boot web application for managing pet records with sophisticated
 - [Prerequisites](#-prerequisites)
 - [Quick Start](#-quick-start)
 - [User Accounts](#-user-accounts)
+- [API Documentation](#-api-documentation)
 - [API Endpoints](#-api-endpoints)
 - [Troubleshooting](#-troubleshooting)
 
@@ -83,6 +84,11 @@ mvn spring-boot:run
 
 🌐 **Application URL**: [http://localhost:8080/login](http://localhost:8080/login)
 
+### Step 5: API Documentation
+
+📚 **Swagger UI**: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)  
+📋 **OpenAPI JSON**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
 ---
 
 ## 👤 User Accounts
@@ -119,6 +125,50 @@ The application comes with pre-configured user accounts for immediate testing:
 - Update pet health information
 - Approve/disapprove medical records
 - Access veterinary dashboard
+
+---
+
+## 📚 API Documentation
+
+The Pet Registry System includes comprehensive API documentation powered by **Swagger/OpenAPI 3.0**.
+
+### Interactive API Documentation
+
+🌐 **Swagger UI**: [http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
+
+The Swagger UI provides:
+- **Interactive API Testing**: Test all endpoints directly from the browser
+- **Real-time Documentation**: Auto-generated from code annotations
+- **Request/Response Examples**: See exactly what data to send and expect
+- **Authentication Testing**: Test with different user roles
+- **Schema Definitions**: Complete data models for Users and Pets
+
+### API Specification
+
+📋 **OpenAPI JSON**: [http://localhost:8080/v3/api-docs](http://localhost:8080/v3/api-docs)
+
+Use this endpoint to:
+- Import into Postman or other API testing tools
+- Generate client libraries in different programming languages
+- Integration with other development tools
+
+### API Categories
+
+The API is organized into three main categories:
+
+1. **🔒 User Management** - Create, modify, and manage user accounts
+2. **🐾 Pet Management** - Complete CRUD operations for pet records
+3. **🌐 Template Controller** - Web interface compatible endpoints
+
+### Authentication for API Testing
+
+All protected endpoints require authentication. Use these credentials in Swagger UI:
+
+- **Admin**: `admin` / `pass` - Full access to all endpoints
+- **Citizen**: `citizen` / `pass` - Pet creation and management
+- **Vet**: `vet` / `pass` - Medical record updates and approvals
+
+> **💡 Tip**: Access the Swagger UI while the application is running to explore all available endpoints with live documentation and testing capabilities.
 
 ---
 
